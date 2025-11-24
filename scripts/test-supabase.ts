@@ -2,11 +2,30 @@
 
 /**
  * Test script to verify Supabase connection and database setup
- * Run with: npx ts-node scripts/test-supabase.ts
+ * Run with: npm run test:db
  */
 
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "../types/database";
+import { readFileSync } from "fs";
+import { join } from "path";
+
+// Load environment variables from .env.local
+const envPath = join(process.cwd(), ".env.local");
+try {
+  const envFile = readFileSync(envPath, "utf-8");
+  envFile.split("\n").forEach((line) => {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) return;
+    const [key, ...valueParts] = trimmed.split("=");
+    const value = valueParts.join("=");
+    if (key && value) {
+      process.env[key] = value;
+    }
+  });
+} catch (error) {
+  console.error("⚠️  Could not load .env.local file");
+}
 
 // Load environment variables
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
@@ -87,8 +106,8 @@ async function testConnection() {
       .from("analyses")
       .insert({
         url: testUrl,
-        status: "pending",
-      })
+        status: "pending" as const,
+      } as any)
       .select()
       .single();
 
@@ -98,7 +117,7 @@ async function testConnection() {
       console.log("✅ Insert successful!");
 
       // Clean up test data
-      await supabase.from("analyses").delete().eq("id", insertData.id);
+      await supabase.from("analyses").delete().eq("id", (insertData as any).id);
       console.log("✅ Cleanup successful!");
     }
 

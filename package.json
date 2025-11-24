@@ -10,17 +10,19 @@
     "test:db": "tsx scripts/test-supabase.ts"
   },
   "dependencies": {
-    "next": "^14.2.16",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "@radix-ui/react-label": "^2.1.8",
+    "@radix-ui/react-slot": "^1.2.4",
     "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.45.4",
     "@upstash/feedback": "^0.1.6",
-    "openai": "^4.73.0",
     "cheerio": "^1.0.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.454.0",
+    "next": "^14.2.16",
+    "openai": "^4.73.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.23.8"
@@ -29,12 +31,12 @@
     "@types/node": "^22.9.0",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
-    "typescript": "^5.6.3",
-    "tsx": "^4.19.2",
+    "autoprefixer": "^10.4.20",
     "eslint": "^8.57.1",
     "eslint-config-next": "^14.2.16",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.14",
-    "autoprefixer": "^10.4.20"
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
   }
 }

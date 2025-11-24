@@ -15,6 +15,7 @@ Ontologizer is a migration from the WordPress plugin to a modern Next.js web app
 - **Styling:** Tailwind CSS
 - **UI Components:** shadcn/ui
 - **Database & Auth:** Supabase
+- **AI/LLM:** OpenAI GPT-5 (for entity extraction & content analysis)
 - **Feedback System:** Upstash Feedback
 - **Deployment:** Vercel (recommended)
 
@@ -130,9 +131,12 @@ npx shadcn@latest add form
   - JSON-LD output
 
 - **Phase 4: Advanced Features**
-  - AI-powered content analysis
+  - AI-powered content analysis (OpenAI GPT-5)
+  - Entity extraction and enrichment
+  - Google Gemini fan-out query analysis
+  - Content outline recommendations
   - Schema templates
-  - Export functionality
+  - Export functionality (JSON/CSV/Markdown)
 
 ## Scripts
 

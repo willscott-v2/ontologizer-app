@@ -37,6 +37,12 @@ The Ontologizer web application foundation has been successfully set up and is r
 - Middleware for protected routes
 - Type-safe database access ready
 
+### 3.5. AI/LLM Integration Ready
+- OpenAI SDK installed and ready
+- Configured for GPT-5 usage
+- Environment variables template includes model selection
+- Ready for entity extraction and content analysis
+
 ### 4. Developer Experience
 - ESLint for code quality
 - PostCSS with Autoprefixer
@@ -118,8 +124,11 @@ Required variables (see .env.example):
 - `NEXT_PUBLIC_UPSTASH_FEEDBACK_TOKEN`
 - `NEXT_PUBLIC_APP_URL`
 
-Optional (for future features):
-- `OPENAI_API_KEY`
+AI/LLM Configuration:
+- `OPENAI_API_KEY` (required for core features)
+- `OPENAI_MODEL` (default: gpt-5)
+
+Optional (for future monetization):
 - `STRIPE_PUBLISHABLE_KEY`
 - `STRIPE_SECRET_KEY`
 - `STRIPE_WEBHOOK_SECRET`

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient as createServerClient } from "@/lib/supabase/server";
-import { openai } from "@/lib/openai";
+import { openai, isOpenAIConfigured } from "@/lib/openai";
 import { enrichEntities } from "@/lib/services/entity-enrichment";
 import {
   generateQueryFanout,
@@ -178,9 +178,17 @@ TOPIC SALIENCE:
 
 Quality over quantity - extract 8-12 highly relevant entities, not 20+ generic ones.`;
 
+  // Check if OpenAI is configured before making the call
+  if (!isOpenAIConfigured()) {
+    throw new Error("OpenAI API key is not configured or invalid. Please check OPENAI_API_KEY environment variable.");
+  }
+
   try {
+    const model = process.env.OPENAI_MODEL || "gpt-4o";
+    console.log(`[OpenAI] Calling model: ${model}`);
+
     const completion = await openai.chat.completions.create({
-      model: process.env.OPENAI_MODEL || "gpt-4o",
+      model,
       messages: [
         {
           role: "system",
@@ -203,7 +211,27 @@ Quality over quantity - extract 8-12 highly relevant entities, not 20+ generic o
       totalTokens: completion.usage?.total_tokens || 0,
     };
   } catch (error: any) {
-    throw new Error(`GPT analysis failed: ${error.message}`);
+    // Log detailed error information for debugging
+    console.error("[OpenAI] API Error Details:", {
+      name: error.name,
+      message: error.message,
+      status: error.status,
+      code: error.code,
+      type: error.type,
+    });
+
+    // Provide more specific error messages
+    if (error.status === 401) {
+      throw new Error("OpenAI API authentication failed. Please check your API key.");
+    } else if (error.status === 429) {
+      throw new Error("OpenAI API rate limit exceeded. Please try again later.");
+    } else if (error.status === 500 || error.status === 503) {
+      throw new Error("OpenAI API is temporarily unavailable. Please try again later.");
+    } else if (error.code === "ENOTFOUND" || error.code === "ECONNREFUSED") {
+      throw new Error("Unable to connect to OpenAI API. Network error.");
+    }
+
+    throw new Error(`GPT analysis failed: ${error.message || "Unknown error"}`);
   }
 }
 

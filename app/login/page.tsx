@@ -3,10 +3,10 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/design-system/button";
+import { Input } from "@/components/ui/design-system/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/design-system/card";
 import { useAuth } from "@/lib/hooks/useAuth";
 
 export default function LoginPage() {
@@ -35,16 +35,16 @@ export default function LoginPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4">
-        <Card className="w-full max-w-md">
+      <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-[var(--dark-blue)] to-[var(--lighter-blue)]">
+        <Card variant="glass" padding="lg" className="w-full max-w-md">
           <CardHeader>
-            <CardTitle>Check your email</CardTitle>
-            <CardDescription>
+            <CardTitle className="text-white text-2xl">Check your email</CardTitle>
+            <CardDescription className="text-[var(--light-gray)] text-base mt-1">
               We sent you a magic link to {email}
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground">
+          <CardContent className="mt-2">
+            <p className="text-base text-[var(--light-gray)]">
               Click the link in the email to sign in to your account. You can close this window.
             </p>
           </CardContent>
@@ -54,18 +54,26 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-br from-[var(--dark-blue)] to-[var(--lighter-blue)]">
+      <div className="mb-8 text-center">
+        <h1 className="text-4xl font-extrabold">
+          <span className="text-gradient-orange">Ontologizer</span>
+        </h1>
+      </div>
+
+      <Card variant="glass" padding="lg" className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>Welcome to Ontologizer</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-white text-2xl">Welcome</CardTitle>
+          <CardDescription className="text-[var(--light-gray)] text-base mt-1">
             Sign in with your email to get started
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-4 mt-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email" className="text-white text-sm font-medium">
+                Email
+              </Label>
               <Input
                 id="email"
                 type="email"
@@ -74,19 +82,21 @@ export default function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 disabled={loading}
+                variant="glass"
+                className="text-lg py-3"
               />
             </div>
             {error && (
-              <div className="text-sm text-destructive">
+              <div className="text-sm text-[var(--error-red)] bg-red-900/20 border border-red-800/30 rounded-md p-3">
                 {error}
               </div>
             )}
           </CardContent>
-          <CardFooter className="flex flex-col gap-4">
-            <Button type="submit" className="w-full" disabled={loading}>
+          <CardFooter className="flex flex-col gap-4 mt-4">
+            <Button type="submit" className="w-full" disabled={loading} size="lg">
               {loading ? "Sending magic link..." : "Send magic link"}
             </Button>
-            <p className="text-sm text-muted-foreground text-center">
+            <p className="text-sm text-[var(--light-gray)] text-center">
               No password required. We&apos;ll send you a secure link to sign in.
             </p>
           </CardFooter>

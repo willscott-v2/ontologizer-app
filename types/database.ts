@@ -49,6 +49,9 @@ export interface Profile {
   avatar_url: string | null;
   analyses_count: number;
   total_tokens_used: number;
+  openai_tokens_used: number;
+  gemini_tokens_used: number;
+  total_cost_usd: number;
   created_at: string;
   updated_at: string;
 }
@@ -60,6 +63,9 @@ export interface ProfileInsert {
   avatar_url?: string | null;
   analyses_count?: number;
   total_tokens_used?: number;
+  openai_tokens_used?: number;
+  gemini_tokens_used?: number;
+  total_cost_usd?: number;
 }
 
 export interface ProfileUpdate {
@@ -68,6 +74,9 @@ export interface ProfileUpdate {
   avatar_url?: string | null;
   analyses_count?: number;
   total_tokens_used?: number;
+  openai_tokens_used?: number;
+  gemini_tokens_used?: number;
+  total_cost_usd?: number;
 }
 
 // ============================================================================
@@ -92,6 +101,15 @@ export interface Analysis {
   prompt_tokens: number | null;
   completion_tokens: number | null;
   total_tokens: number | null;
+  openai_prompt_tokens: number | null;
+  openai_completion_tokens: number | null;
+  openai_total_tokens: number | null;
+  openai_cost_usd: number | null;
+  gemini_prompt_tokens: number | null;
+  gemini_completion_tokens: number | null;
+  gemini_total_tokens: number | null;
+  gemini_cost_usd: number | null;
+  total_cost_usd: number | null;
   processing_time_ms: number | null;
   status: AnalysisStatus;
   error_message: string | null;

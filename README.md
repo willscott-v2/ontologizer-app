@@ -6,7 +6,7 @@ Advanced Structured Data Tool - A Next.js application for generating comprehensi
 
 Ontologizer is a migration from the WordPress plugin to a modern Next.js web application. It helps users generate and manage structured data (JSON-LD) for improved SEO and content organization.
 
-**Domain:** [theontologizer.com](https://theontologizer.com)
+**Production URL:** [ontologizer.searchinfluence.com](https://ontologizer.searchinfluence.com)
 
 ## Tech Stack
 
@@ -14,10 +14,12 @@ Ontologizer is a migration from the WordPress plugin to a modern Next.js web app
 - **Language:** TypeScript
 - **Styling:** Tailwind CSS
 - **UI Components:** shadcn/ui
-- **Database & Auth:** Supabase
-- **AI/LLM:** OpenAI GPT-5 (for entity extraction & content analysis)
+- **Database & Auth:** Supabase (magic link authentication)
+- **AI/LLM:** OpenAI GPT-5 (entity extraction & content analysis)
+- **AI/LLM:** Google Gemini (query fan-out & content recommendations)
+- **Entity Enrichment:** Google Knowledge Graph API
 - **Feedback System:** Upstash Feedback
-- **Deployment:** Vercel (recommended)
+- **Deployment:** Vercel
 
 ## Project Structure
 
@@ -114,29 +116,43 @@ npx shadcn@latest add form
 
 ## Development Phases
 
-- **Phase 1: Project Setup** ✅ (Complete)
+- **Phase 1: Project Setup** ✅ Complete
   - Next.js 14+ with TypeScript
   - Tailwind CSS + shadcn/ui
   - Supabase configuration
   - Basic project structure
 
-- **Phase 2: Database & Authentication** (Next)
+- **Phase 2: Database & Authentication** ✅ Complete
   - Supabase database schema
-  - User authentication flows
+  - Magic link authentication
   - Protected routes
+  - Email domain restrictions (webboss.com, searchinfluence.com)
 
-- **Phase 3: Core Features**
-  - Schema generation interface
-  - URL analysis
-  - JSON-LD output
+- **Phase 3: Core Features** ✅ Complete
+  - URL analysis interface
+  - OpenAI GPT-5 entity extraction
+  - JSON-LD structured data output
+  - Entity enrichment via Google Knowledge Graph
 
-- **Phase 4: Advanced Features**
-  - AI-powered content analysis (OpenAI GPT-5)
-  - Entity extraction and enrichment
-  - Google Gemini fan-out query analysis
+- **Phase 4: Advanced Features** ✅ Complete
+  - Google Gemini query fan-out analysis
   - Content outline recommendations
-  - Schema templates
-  - Export functionality (JSON/CSV/Markdown)
+  - Salience scoring for entities
+  - Export functionality (JSON/Markdown)
+  - Feedback system integration
+
+## Future Development
+
+Potential enhancements for future iterations:
+
+- **Multi-page Analysis** - Batch analyze multiple URLs from a sitemap
+- **Schema Templates** - Pre-built templates for common schema types (LocalBusiness, Product, Event, etc.)
+- **Historical Tracking** - Track changes to page entities over time
+- **Competitor Comparison** - Compare entity coverage against competitor pages
+- **WordPress Plugin Integration** - Direct publishing of JSON-LD back to WordPress sites
+- **API Access** - REST API for programmatic access to analysis features
+- **Team Collaboration** - Shared workspaces and analysis history
+- **Custom Entity Types** - User-defined entity categories and extraction rules
 
 ## Scripts
 

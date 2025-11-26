@@ -702,9 +702,10 @@ export async function POST(request: NextRequest) {
           useCache: !bypassCache, // Bypass cache if requested
         });
 
-        // Merge enriched data with original entities
+        // Merge enriched data with original entities using Map for O(1) lookups
+        const enrichedMap = new Map(enrichedData.map((e) => [e.name, e]));
         enrichedEntities = enrichedEntities.map((entity: any) => {
-          const enriched = enrichedData.find((e) => e.name === entity.name);
+          const enriched = enrichedMap.get(entity.name);
           if (enriched) {
             return {
               ...entity,

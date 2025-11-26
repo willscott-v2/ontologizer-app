@@ -20,7 +20,7 @@ export async function GET() {
     const completion = await openai.chat.completions.create({
       model: model,
       messages: [{ role: "user", content: "Say hello in one word." }],
-      max_tokens: 10,
+      max_completion_tokens: 10,
     });
 
     return NextResponse.json({

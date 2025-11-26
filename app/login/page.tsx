@@ -22,6 +22,29 @@ export default function LoginPage() {
     setLoading(true);
     setError(null);
 
+    // First check if the email is allowed
+    try {
+      const checkResponse = await fetch("/api/auth/check-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      const { allowed } = await checkResponse.json();
+
+      if (!allowed) {
+        setError("This email is not authorized to access Ontologizer. Please contact the administrator.");
+        setLoading(false);
+        return;
+      }
+    } catch (err) {
+      console.error("Failed to check email:", err);
+      setError("Failed to verify email. Please try again.");
+      setLoading(false);
+      return;
+    }
+
+    // Email is allowed, proceed with magic link
     const { error: signInError } = await signInWithEmail(email);
 
     if (signInError) {

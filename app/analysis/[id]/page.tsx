@@ -52,6 +52,8 @@ interface Analysis {
   gemini_total_tokens?: number;
   status: string;
   created_at: string;
+  is_public?: boolean;
+  share_token?: string;
 }
 
 export default function AnalysisDetailPage() {
@@ -63,6 +65,9 @@ export default function AnalysisDetailPage() {
   const [error, setError] = useState<string | null>(null);
   const [deleting, setDeleting] = useState(false);
   const [feedbackOpen, setFeedbackOpen] = useState(false);
+  const [sharing, setSharing] = useState(false);
+  const [shareUrl, setShareUrl] = useState<string | null>(null);
+  const [shareCopied, setShareCopied] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -115,6 +120,61 @@ export default function AnalysisDetailPage() {
       alert("Failed to delete analysis");
     } finally {
       setDeleting(false);
+    }
+  };
+
+  const handleShare = async () => {
+    if (!analysis) return;
+
+    // If already shared, just copy the existing URL
+    if (analysis.is_public && analysis.share_token) {
+      const url = `${window.location.origin}/share/${analysis.share_token}`;
+      setShareUrl(url);
+      navigator.clipboard.writeText(url);
+      setShareCopied(true);
+      setTimeout(() => setShareCopied(false), 2000);
+      return;
+    }
+
+    setSharing(true);
+    try {
+      const response = await fetch(`/api/analyses/${analysis.id}/share`, {
+        method: "POST",
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setShareUrl(data.shareUrl);
+        setAnalysis({ ...analysis, is_public: true, share_token: data.shareToken });
+        navigator.clipboard.writeText(data.shareUrl);
+        setShareCopied(true);
+        setTimeout(() => setShareCopied(false), 2000);
+      } else {
+        alert("Failed to generate share link");
+      }
+    } catch (err) {
+      console.error("Failed to share:", err);
+      alert("Failed to generate share link");
+    } finally {
+      setSharing(false);
+    }
+  };
+
+  const handleRevokeShare = async () => {
+    if (!analysis || !confirm("Revoke public share link? Anyone with the link will no longer be able to view this analysis.")) return;
+
+    try {
+      const response = await fetch(`/api/analyses/${analysis.id}/share`, {
+        method: "DELETE",
+      });
+      if (response.ok) {
+        setShareUrl(null);
+        setAnalysis({ ...analysis, is_public: false, share_token: undefined });
+      } else {
+        alert("Failed to revoke share link");
+      }
+    } catch (err) {
+      console.error("Failed to revoke share:", err);
+      alert("Failed to revoke share link");
     }
   };
 
@@ -227,13 +287,38 @@ export default function AnalysisDetailPage() {
               Analyzed on {new Date(analysis.created_at).toLocaleString()}
             </p>
           </div>
-          <div className="flex gap-3">
-            <Button variant="secondary" onClick={downloadMarkdown}>
-              Download Markdown
-            </Button>
-            <Button variant="ghost" onClick={handleDelete} disabled={deleting}>
-              {deleting ? "Deleting..." : "Delete"}
-            </Button>
+          <div className="flex flex-col items-end gap-3">
+            <div className="flex gap-3">
+              <Button
+                variant={analysis.is_public ? "secondary" : "default"}
+                onClick={handleShare}
+                disabled={sharing}
+              >
+                {sharing ? "Generating..." : shareCopied ? "Link Copied!" : analysis.is_public ? "Copy Share Link" : "Share"}
+              </Button>
+              <Button variant="secondary" onClick={downloadMarkdown}>
+                Download Markdown
+              </Button>
+              <Button variant="ghost" onClick={handleDelete} disabled={deleting}>
+                {deleting ? "Deleting..." : "Delete"}
+              </Button>
+            </div>
+            {analysis.is_public && (
+              <div className="flex items-center gap-2 text-sm">
+                <span className="text-[var(--success-green)] flex items-center gap-1">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                  </svg>
+                  Public link active
+                </span>
+                <button
+                  onClick={handleRevokeShare}
+                  className="text-[var(--error-red)] hover:underline text-xs"
+                >
+                  Revoke
+                </button>
+              </div>
+            )}
           </div>
         </div>
 

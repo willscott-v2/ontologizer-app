@@ -6,9 +6,10 @@ export const dynamic = "force-dynamic";
 // GET /api/analyses/[id] - Fetch a single analysis by ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const supabase = await createServerClient();
 
     // Get authenticated user
@@ -20,8 +21,6 @@ export async function GET(
         { status: 401 }
       );
     }
-
-    const { id } = params;
 
     // Fetch the analysis
     const { data: analysis, error: fetchError } = await supabase
@@ -58,9 +57,10 @@ export async function GET(
 // DELETE /api/analyses/[id] - Delete an analysis
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const supabase = await createServerClient();
 
     // Get authenticated user
@@ -72,8 +72,6 @@ export async function DELETE(
         { status: 401 }
       );
     }
-
-    const { id } = params;
 
     // Delete the analysis (RLS will ensure user can only delete their own)
     const { error: deleteError } = await supabase

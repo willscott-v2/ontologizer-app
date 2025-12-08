@@ -33,7 +33,7 @@ export default function LoginPage() {
       const { allowed } = await checkResponse.json();
 
       if (!allowed) {
-        setError("This email is not authorized to access Ontologizer. Please contact the administrator.");
+        setError("This email is not authorized to access The Ontologizer. Please contact the administrator.");
         setLoading(false);
         return;
       }
@@ -80,7 +80,7 @@ export default function LoginPage() {
     <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-br from-[var(--dark-blue)] to-[var(--lighter-blue)]">
       <div className="mb-8 text-center">
         <h1 className="text-4xl font-extrabold">
-          <span className="text-gradient-orange">Ontologizer</span>
+          <span className="text-gradient-orange">The Ontologizer</span>
         </h1>
       </div>
 

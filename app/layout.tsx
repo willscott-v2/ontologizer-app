@@ -6,8 +6,13 @@ import { AuthProviderWrapper } from "@/components/providers/auth-provider-wrappe
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Ontologizer - Advanced Structured Data Tool",
+  title: "The Ontologizer - Advanced Structured Data Tool",
   description: "Generate comprehensive JSON-LD structured data for your website with AI-powered content analysis",
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
